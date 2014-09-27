@@ -165,10 +165,16 @@ function sale_list()
 		/** 初始化函數 **/
 		function init()
 		{
+			init_date();
 			init_rows();
 
 			var $add_btn = $('.submit-btn').parent('a');
 			$add_btn.click(submit);
+		}
+
+		function init_date()
+		{
+			$('.modal-date-select').val(new Date().Format('yyyy-MM-dd'));
 		}
 
 		/** 初始欄位 **/
@@ -214,7 +220,8 @@ function sale_list()
 					item_quantity: Array(),
 					item_up: Array(),
 					item_value: Array(),
-				};
+				},
+				date = $('.modal-date-select').val();
 
 			$('.sale-item-name').each(function(){
 				send.item_id.push($(this).find('.frm-quantity').data('item'));
@@ -224,7 +231,7 @@ function sale_list()
 			});
 
 			$.ajax({
-				url: 'api/sale/add_record',
+				url: 'api/sale/add_record/' + date,
 				data: {
 					item_id: JSON.stringify(send.item_id),
 					item_quantity: JSON.stringify(send.item_quantity),
@@ -236,6 +243,7 @@ function sale_list()
 					var decode_result = JSON.parse(result);
 					target.LoadData();
 
+					$('.modal-date-select').hide();
 					$('.submit-btn').parents('li').animate({opacity: 0}, function(){
 						$(this).hide();
 						$('.modal-input-area br').remove();
@@ -280,17 +288,25 @@ function sale_list()
 		/** 初始化函數 **/
 		function init()
 		{
+			init_date();
 			init_rows();
 
 			var $add_btn = $('.submit-btn').parent('a');
 			$add_btn.click(submit);
 		}
 
+		/** 初始日期 **/
+		function init_date()
+		{
+			var edit_date = $('.date-select').val();
+			$('.modal-date-select').val(edit_date).attr('disabled', 'disabled');
+		}
+
 		/** 初始欄位 **/
 		function init_rows()
 		{
 			var records,
-				select_date = $('.date-select').val();
+				select_date = $('.modal-date-select').val();
 
 			$.ajax({
 				url: 'api/sale/record_list/' + select_date,
@@ -404,8 +420,7 @@ function sale_list()
 					var decode_result = JSON.parse(result);
 					target.LoadData(select_date);
 
-
-
+					$('.modal-date-select').hide();
 					$('.submit-btn').parents('li').animate({opacity: 0}, function(){
 						$(this).hide();
 					});

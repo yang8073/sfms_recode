@@ -13,6 +13,7 @@
 <div class="row placeholders">	
 	<div class="col-md-6 col-md-offset-3 modal-input-area">
 		<div class="alert modal-alert" role="alert" style="display: none; opacity: 0;"></div>
+		<input type="date" class="form-control modal-date-select">
 	</div>
 </div>
 

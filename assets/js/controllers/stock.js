@@ -164,10 +164,17 @@ function stock_list()
 		/** 初始化函數 **/
 		function init()
 		{
+			init_date();
 			init_rows();
 
 			var $add_btn = $('.submit-btn').parent('a');
 			$add_btn.click(submit);
+		}
+
+		/** 初始時間 **/
+		function init_date()
+		{
+			$('.modal-date-select').val(new Date().Format('yyyy-MM-dd'));
 		}
 
 		/** 初始欄位 **/
@@ -208,7 +215,6 @@ function stock_list()
 
 		function init_total_row()
 		{
-			console.log('total');
 			$('.form-control').keyup(function(){
 				var t_sum = 0;
 				$('.frm-cash').each(function(){
@@ -234,7 +240,8 @@ function stock_list()
 					item_quantity: Array(),
 					item_up: Array(),
 					item_value: Array(),
-				};
+				},
+				date = $('.modal-date-select').val();
 
 			$('.stock-item-name').each(function(){
 				send.item_id.push($(this).find('.frm-quantity').data('item'));
@@ -244,7 +251,7 @@ function stock_list()
 			});
 
 			$.ajax({
-				url: 'api/stock/add_record',
+				url: 'api/stock/add_record/' + date,
 				data: {
 					item_id: JSON.stringify(send.item_id),
 					item_quantity: JSON.stringify(send.item_quantity),
@@ -256,6 +263,7 @@ function stock_list()
 					var decode_result = JSON.parse(result);
 					target.LoadData();
 
+					$('.modal-date-select').hide();
 					$('.submit-btn').parents('li').animate({opacity: 0}, function(){
 						$(this).hide();
 						$('.modal-input-area br').remove();
@@ -300,17 +308,25 @@ function stock_list()
 		/** 初始化函數 **/
 		function init()
 		{
+			init_date();
 			init_rows();
 
 			var $add_btn = $('.submit-btn').parent('a');
 			$add_btn.click(submit);
 		}
 
+		/** 初始時間 **/
+		function init_date()
+		{
+			var edit_date = $('.date-select').val();
+			$('.modal-date-select').val(edit_date).attr('disabled', 'disabled');
+		}
+
 		/** 初始欄位 **/
 		function init_rows()
 		{
 			var records,
-				select_date = $('.date-select').val();
+				select_date = $('.modal-date-select').val();
 
 			$.ajax({
 				url: 'api/stock/record_list/' + select_date,
@@ -444,8 +460,7 @@ function stock_list()
 					var decode_result = JSON.parse(result);
 					target.LoadData(select_date);
 
-
-
+					$('.modal-date-select').hide();
 					$('.submit-btn').parents('li').animate({opacity: 0}, function(){
 						$(this).hide();
 					});

@@ -74,7 +74,7 @@ class SaleModel extends CI_Model {
 	# 新增銷貨紀錄
 	# addRecord(項目編號陣列, 數量陣列, 單價陣列, 金額陣列)
 	# 傳回新增對象{success:成功數量, fail:失敗數量}
-	function addRecord($item_id, $item_quantity, $item_up, $item_value)
+	function addRecord($item_id, $item_quantity, $item_up, $item_value, $date)
 	{
 		$success = 0;
 		$fail = 0;
@@ -84,7 +84,7 @@ class SaleModel extends CI_Model {
 			$up = isset($item_up[$key])?$item_up[$key]:0;
 			$value = isset($item_value[$key])?$item_value[$key]:0;
 			$sql = "INSERT INTO sales (s_item, s_quantity, s_up, s_value, s_date, m_id) VALUES (?, ?, ?, ?, ?, ?)";
-			$query = $this->db->query($sql, array($id, $quantity, $up, $value, date('y-m-d'),$this->user_id));
+			$query = $this->db->query($sql, array($id, $quantity, $up, $value, $date, $this->user_id));
 			if($query)
 				$success++;
 			else

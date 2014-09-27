@@ -54,13 +54,15 @@ class Stock extends CI_Controller {
 	## item_up			Array()
 	## item_value		Array()
 	# 傳回{'success'=> 執行成功數量, 'fail'=> 執行失敗數量}
-	public function add_record()
+	public function add_record($date = null)
 	{
+		if($date == null || !$this->_checkDateFormat($date))
+			$date = date('Y-m-d');
 		$item_id =  json_decode($this->input->get('item_id', true));
 		$item_quantity = json_decode($this->input->get('item_quantity', true));
 		$item_up = json_decode($this->input->get('item_up', true));
 		$item_value = json_decode($this->input->get('item_value', true));
-		$result = $this->stockmodel->addRecord($item_id, $item_quantity, $item_up, $item_value);
+		$result = $this->stockmodel->addRecord($item_id, $item_quantity, $item_up, $item_value, $date);
 		echo json_encode($result);
 	}
 
